@@ -1,0 +1,1 @@
+export const baseURL = 'https://sign-translator-api.herokuapp.com/sign-translator'

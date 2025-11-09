@@ -1,0 +1,285 @@
+body {
+    padding-top: 70px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffffff;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.heading {
+    margin-top: 30px;
+    text-align: center;
+    font-weight: 600;
+    color: #0d9488;
+    letter-spacing: 0.5px;
+}
+
+.label-style {
+    color: #0d9488 !important;
+}
+.space-between{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.label-style{
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+.input-style{
+    padding: 5px;
+    font-size: 20px !important;
+    margin-top: 20px !important;
+    background-color: #ffffff !important;
+    color: #0d9488 !important;
+    border: 1px solid #14b8a6 !important;
+}
+
+.btn-style{
+    padding: 10px !important;
+    font-size: 20px !important;
+    margin-top: 20px !important;
+}
+
+.w-33{
+    width: 32%;
+}
+
+.btn-gap{
+    margin-top: 50px !important;
+}
+
+.bot-label{
+    margin-top: 20px;
+    font-size: 25px;
+    text-align: center;
+}
+
+.bot-image{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 30px;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.bot-image{
+    transition: all 0.3s ease;
+}
+
+.btn-start{
+    border: none !important;
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%) !important;
+    color: white !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.btn-start:hover{
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4) !important;
+    background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%) !important;
+}
+
+i{
+    margin-left: 20px;
+}
+
+/* Standardize navbar button text sizes */
+#mainNav .nav-link {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+/* Ensure Three.js canvas stays transparent so container background shows */
+#canvas canvas {
+    background: transparent !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+}
+
+/* Background for the canvas container on LearnSign */
+.canvas-bg {
+    background: transparent;
+    border-radius: 10px;
+    padding: 8px;
+    position: relative;
+    overflow: hidden;
+    min-height: calc(100vh - 120px);
+}
+
+/* Simple overlay to show canvas status (loading/error) */
+.canvas-status{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 10px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.home-gradient {
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #2dd4bf 100%);
+    height: calc(100vh - 70px);
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Front page (Masthead) typography overrides */
+.home-gradient .display-1 {
+    font-size: clamp(2.75rem, 6vw, 5rem) !important;
+    line-height: 1.1;
+}
+
+.mast-subtext {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+}
+
+.divider {
+    display: block;
+    height: 4px;
+    width: 5rem !important;
+    background: linear-gradient(90deg, #14b8a6 0%, #2dd4bf 100%);
+    border-radius: 2px;
+}
+
+.section-heading {
+    color: #0d9488;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.normal-text {
+    font-size: clamp(1.1rem, 1.6vw, 1.25rem);
+}
+
+.footer-link:hover {
+    color: white;
+}
+
+.card-footer-style {
+    background-color: darkblue !important;
+    color: white !important;
+    
+}
+
+.card-background {
+    background: #ffffff !important;
+    border: 1px solid rgba(13, 148, 136, 0.15) !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-background:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(13, 148, 136, 0.2) !important;
+    border-color: rgba(20, 184, 166, 0.3) !important;
+}
+
+.signs{
+    margin-top: 10px;
+    min-height: 40px;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%) !important;
+    border: 2px solid #0d9488 !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 6px 10px !important;
+}
+
+.signs:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(20, 184, 166, 0.6);
+    background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%) !important;
+    color: #ffffff !important;
+    border-color: #2dd4bf !important;
+}
+
+.hor-line {
+    border: 0;
+    clear:both;
+    display:block;
+    width: 85%;               
+    background: linear-gradient(90deg, transparent 0%, rgba(20, 184, 166, 0.2) 50%, transparent 100%);
+    height: 2px;
+    border-radius: 2px;
+}
+
+/* Custom button styles for modern look */
+.btn-info {
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%) !important;
+    border: none !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+    font-weight: 600 !important;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4) !important;
+    color: white !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%) !important;
+    border: none !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+    font-weight: 600 !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4) !important;
+    color: white !important;
+}
+
+/* Canvas border update */
+canvas {
+    border-style: solid;
+    border-width: 3px;
+    border-color: rgba(20, 184, 166, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(13, 148, 136, 0.2);
+}
+
+/* Bot image hover effect */
+.bot-image:hover {
+    border-width: 5px;
+    border-color: rgba(20, 184, 166, 0.6);
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+/* Navbar typography adjustments */
+#mainNav .navbar-brand {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
+#mainNav .nav-link {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}

@@ -1,0 +1,23 @@
+{
+  "name": "sign-translator",
+  "version": "1.0.0",
+  "description": "Sign Translator - An Avatar-based Indian Sign Language Toolkit",
+  "scripts": {
+    "start": "cd client && npm start",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "test": "cd client && npm test"
+  },
+  "keywords": [
+    "sign-language",
+    "isl",
+    "translator",
+    "react"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+
+
+
+
