@@ -279,7 +279,7 @@ function CreateVideo() {
 
       <ConfirmModal show={showModal} onHide={(e) => {
         setShowModal(false)
-        navigate('/sign-translator/all-videos', { replace: true })
+        navigate('/sign-kit/all-videos', { replace: true })
       }} videoId={videoId} />
     </div>
   );

@@ -11,7 +11,6 @@ import ybot from '../Models/ybot/ybot.glb';
 import xbotPic from '../Models/xbot/xbot.png';
 import ybotPic from '../Models/ybot/ybot.png';
 
-
 import * as words from '../Animations/words';
 import * as alphabets from '../Animations/alphabets';
 import { defaultPose } from '../Animations/defaultPose';
@@ -48,13 +47,11 @@ function Video() {
     ref.characters = [];
 
     ref.scene = new THREE.Scene();
-    ref.scene.background = null;
+    ref.scene.background = new THREE.Color(0xdddddd);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    ref.scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    dirLight.position.set(5, 5, 5);
-    ref.scene.add(dirLight);
+    const spotLight = new THREE.SpotLight(0xffffff, 2);
+    spotLight.position.set(0, 5, 5);
+    ref.scene.add(spotLight);
 
     ref.camera = new THREE.PerspectiveCamera(
         30,
@@ -63,17 +60,7 @@ function Video() {
         1000
     )
 
-    ref.renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      powerPreference: 'high-performance',
-      alpha: true,
-      stencil: false,
-      depth: true,
-      logarithmicDepthBuffer: false,
-      preserveDrawingBuffer: false,
-    });
-    ref.renderer.setPixelRatio(1);
-    ref.renderer.setClearColor(0x000000, 0);
+    ref.renderer = new THREE.WebGLRenderer({ antialias: true });
     ref.renderer.setSize(window.innerWidth*0.57, window.innerHeight - 70);
     document.getElementById("canvas").innerHTML = "";
     document.getElementById("canvas").appendChild(ref.renderer.domElement);
@@ -85,72 +72,17 @@ function Video() {
     loader.load(
       bot,
       (gltf) => {
-        // Remove old avatar if exists
-        if (ref.avatar) {
-          ref.scene.remove(ref.avatar);
-        }
-        
         gltf.scene.traverse((child) => {
           if ( child.type === 'SkinnedMesh' ) {
             child.frustumCulled = false;
           }
-          // Fix material issues for human model
-          if (child.material) {
-            if (Array.isArray(child.material)) {
-              child.material.forEach(mat => {
-                if (mat) {
-                  mat.needsUpdate = true;
-                  // Ensure materials are properly lit
-                  if (!mat.emissive) mat.emissive = new THREE.Color(0x000000);
-                }
-              });
-            } else {
-              child.material.needsUpdate = true;
-              if (!child.material.emissive) child.material.emissive = new THREE.Color(0x000000);
-            }
-          }
-        });
-        
-        // Scale and position the model (default avatars already correctly scaled)
-        
+    });
         ref.avatar = gltf.scene;
-        // Keep avatar at normal size
-        ref.avatar.scale.set(0.95, 0.95, 0.95);
         ref.scene.add(ref.avatar);
-        // Cache bones for fast lookup
-        ref.boneMap = {};
-        ref.avatar.traverse((child) => {
-          if (child.isBone || child.type === 'Bone') {
-            ref.boneMap[child.name] = child;
-          }
-        });
-        ref.getBone = (name) => ref.boneMap[name] || ref.avatar.getObjectByName(name);
-        
-        // Default camera positioning and cleanup for supported avatars
-        ref.camera.position.z = 2.0;
-        ref.camera.position.y = 1.5;
-        // Remove any leftover human-specific lights if present
-        const lightsToRemove = ref.scene.children.filter(child => 
-          child.type === 'DirectionalLight' && child.userData && child.userData.isHumanLight
-        );
-        lightsToRemove.forEach(light => ref.scene.remove(light));
-        
-        // Try default pose, but don't fail if bones don't exist (human model might have different structure)
-        try {
-          defaultPose(ref);
-        } catch (error) {
-          console.warn('Could not apply default pose, model might have different bone structure:', error);
-        }
-        ref.renderer.render(ref.scene, ref.camera);
+        defaultPose(ref);
       },
       (xhr) => {
-        console.log('Loading progress:', (xhr.loaded / xhr.total * 100) + '%');
-      },
-      (error) => {
-        console.error('Error loading model:', error);
-        // Keep transparent background
-        ref.scene.background = null;
-        ref.renderer.render(ref.scene, ref.camera);
+        console.log(xhr);
       }
     );
 
@@ -159,14 +91,6 @@ function Video() {
   }, [ref, bot]);
 
   ref.animate = () => {
-    // Throttle to ~30 FPS
-    const now = performance.now();
-    if (ref.lastFrame && now - ref.lastFrame < (1000/30)) {
-      requestAnimationFrame(ref.animate);
-      return;
-    }
-    ref.lastFrame = now;
-
     if(ref.animations.length === 0){
         ref.pending = false;
       return ;
@@ -175,28 +99,20 @@ function Video() {
     if(ref.animations[0].length){
         if(!ref.flag) {
           if(ref.animations[0][0]==='add-text'){
-            const payload = ref.animations[0][1];
-            if (typeof payload === 'string') {
-              setText(prev => prev + payload);
-            }
+            setText(text + ref.animations[0][1]);
             ref.animations.shift();
           }
           else{
             for(let i=0;i<ref.animations[0].length;){
               let [boneName, action, axis, limit, sign] = ref.animations[0][i]
-              const bone = ref.getBone(boneName);
-              if(!bone){
-                ref.animations[0].splice(i, 1);
-                continue;
-              }
-              if(sign === "+" && bone[action][axis] < limit){
-                  bone[action][axis] += speed;
-                  bone[action][axis] = Math.min(bone[action][axis], limit);
+              if(sign === "+" && ref.avatar.getObjectByName(boneName)[action][axis] < limit){
+                  ref.avatar.getObjectByName(boneName)[action][axis] += speed;
+                  ref.avatar.getObjectByName(boneName)[action][axis] = Math.min(ref.avatar.getObjectByName(boneName)[action][axis], limit);
                   i++;
               }
-              else if(sign === "-" && bone[action][axis] > limit){
-                  bone[action][axis] -= speed;
-                  bone[action][axis] = Math.max(bone[action][axis], limit);
+              else if(sign === "-" && ref.avatar.getObjectByName(boneName)[action][axis] > limit){
+                  ref.avatar.getObjectByName(boneName)[action][axis] -= speed;
+                  ref.avatar.getObjectByName(boneName)[action][axis] = Math.max(ref.avatar.getObjectByName(boneName)[action][axis], limit);
                   i++;
               }
               else{
@@ -217,14 +133,19 @@ function Video() {
   }
 
   const sign = (str) => {
-    str = str.toUpperCase();
+    const cleanText = (raw) => {
+      if (!raw) return "";
+      raw = String(raw).trim().toLowerCase();
+      raw = raw.replace(/[.,!?]/g, '');
+      return raw.toUpperCase();
+    };
+    str = cleanText(str);
     var strWords = str.split(' ');
     setText('')
-
+  
     for(let word of strWords){
       if(words[word]){
         ref.animations.push(['add-text', word+' ']);
-        // Mild inward pre-pose before a full word sign to prevent outward spread
         ref.animations.push([
           ["mixamorigRightArm", "rotation", "y", -Math.PI/10, "-"],
           ["mixamorigLeftArm",  "rotation", "y",  Math.PI/10,  "+"],
@@ -242,21 +163,17 @@ function Video() {
             ref.animations.push(['add-text', ch+' ']);
           else 
             ref.animations.push(['add-text', ch]);
-          // Strong inward pre-pose to bring both hands near center
           ref.animations.push([
-            // Upper arms tilt inward and slightly forward
             ["mixamorigRightArm", "rotation", "y", -Math.PI/6, "-"],
             ["mixamorigLeftArm",  "rotation", "y",  Math.PI/6,  "+"],
             ["mixamorigRightArm", "rotation", "z", -Math.PI/10, "-"],
             ["mixamorigLeftArm",  "rotation", "z",  Math.PI/10, "+"],
             ["mixamorigRightArm", "rotation", "x", -Math.PI/6,  "-"],
             ["mixamorigLeftArm",  "rotation", "x", -Math.PI/6,  "-"],
-            // Forearms bend and yaw slightly inward
             ["mixamorigRightForeArm", "rotation", "x",  Math.PI/10, "+"],
             ["mixamorigLeftForeArm",  "rotation", "x",  Math.PI/10, "+"],
             ["mixamorigRightForeArm", "rotation", "y", -Math.PI/12, "-"],
             ["mixamorigLeftForeArm",  "rotation", "y",  Math.PI/12, "+"],
-            // Hands angle toward center
             ["mixamorigRightHand", "rotation", "y",  Math.PI/8,  "+"],
             ["mixamorigLeftHand",  "rotation", "y", -Math.PI/8,  "-"],
             ["mixamorigRightHand", "rotation", "z", -Math.PI/12, "-"],
@@ -265,7 +182,6 @@ function Video() {
           if (alphabets[ch]) {
             alphabets[ch](ref);
           }
-          // Post-letter center-pose settle to avoid outward drift
           ref.animations.push([
             ["mixamorigRightArm", "rotation", "y", -Math.PI/8, "-"],
             ["mixamorigLeftArm",  "rotation", "y",  Math.PI/8,  "+"],

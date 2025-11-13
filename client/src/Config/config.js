@@ -1,1 +1,1 @@
-export const baseURL = 'https://sign-translator-api.herokuapp.com/sign-translator'
+export const baseURL = "http://localhost:5000/sign-translator";

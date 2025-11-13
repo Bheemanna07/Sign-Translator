@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "Sign Translator - An Avatar-based Indian Sign Language Toolkit",
   "scripts": {
-    "start": "cd client && npm start",
-    "install": "cd client && npm install",
-    "build": "cd client && npm run build",
-    "test": "cd client && npm test"
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm start",
+    "client": "cd client && npm start"
   },
   "keywords": [
     "sign-language",
@@ -15,9 +14,8 @@
     "react"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
-
-
-
-
